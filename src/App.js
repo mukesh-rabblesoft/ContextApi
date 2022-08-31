@@ -1,24 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import { Fragment, useState } from "react";
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import AllRoutes from "./AllRoutes/AllRoutes";
+import MyContext from "./ContextApi/MyContaxt";
+import axios from "axios";
 
 function App() {
+  const [getData, setGetData] = useState([]);
+
+  const url = "https://jsonplaceholder.typicode.com/users";
+
+  useState(() => {
+    axios
+      .get(url)
+      .then((responese) => {
+       //console.log("response",responese.data);
+        setGetData(responese.data);
+        
+      })
+      .catch((Error) => {
+        console.log(Error);
+      });
+  });
+
+//console.log("hellow getData",getData);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      <MyContext.Provider value={getData}>
+        <AllRoutes />
+      </MyContext.Provider>
+    </Fragment>
   );
 }
 
